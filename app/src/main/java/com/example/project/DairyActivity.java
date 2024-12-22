@@ -16,15 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DairyActivity extends AppCompatActivity {
     private EditText diaryEntryEditText;
-    private ListView entriesListView;
-    private ArrayList<String> entries;
-    private ArrayAdapter<String> adapter;
+    private RecyclerView entriesView;
+    private ArrayList<EntryItem> entries;
+    private DiaryAdapter adapter;
     private String date;
 
 
@@ -40,17 +42,20 @@ public class DairyActivity extends AppCompatActivity {
         });
 
         date = getIntent().getStringExtra("date");
-        Log.d("DaityActivity", date);
 
 
         diaryEntryEditText = findViewById(R.id.diaryEntryEditText);
-        entriesListView = findViewById(R.id.entriesListView);
+        entriesView = findViewById(R.id.entriesView);
+        entriesView.setLayoutManager(new LinearLayoutManager(this));
         Button saveButton = findViewById(R.id.saveButton);
         Button calendarButton = findViewById(R.id.calendar_button);
-
         entries = new ArrayList<>();
         adapter = new DiaryAdapter(this, entries, date);
-        entriesListView.setAdapter(adapter);
+        entriesView.setAdapter(adapter);
+
+        EditText text = findViewById(R.id.diaryEntryEditText);
+        EditText type = findViewById(R.id.editTextNumber);
+        EditText time = findViewById(R.id.editTextTime2);
 
 
 
@@ -59,7 +64,8 @@ public class DairyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String entry = diaryEntryEditText.getText().toString().trim();
                 if(!entry.isEmpty()){
-                    entries.add(entry);
+                    //entries.add(new EntryItem(time.toString(), text.toString(),Integer.parseInt(type.toString())));
+                    entries.add(new EntryItem("11:30", "schuzka", 1));
                     adapter.notifyDataSetChanged();
                     diaryEntryEditText.setText("");
                     saveEntries(date);
@@ -75,7 +81,6 @@ public class DairyActivity extends AppCompatActivity {
                 finish();
             }
         });
-
 
     }
 
@@ -94,10 +99,14 @@ public class DairyActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppData", MODE_PRIVATE);
         String savedEntries = sharedPreferences.getString(date, null);
         entries.clear();
-        if (savedEntries != null) {
+        if (savedEntries != null && savedEntries.length() != 0) {
             // Convert the saved entries back to an ArrayList
             String[] entriesArray = savedEntries.split(";");
-            entries.addAll(Arrays.asList(entriesArray));
+            for(String s : entriesArray)
+            {
+                String[] values = s.split("\\$");
+                entries.add(new EntryItem(values[0], values[1], Integer.parseInt(values[2])));
+            }
         }
         adapter.notifyDataSetChanged();
     }
@@ -107,8 +116,8 @@ public class DairyActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // Join the entries list into a single string separated by semicolons
         StringBuilder entriesString = new StringBuilder();
-        for (String entry : entries) {
-            entriesString.append(entry).append(";");
+        for (EntryItem item : entries) {
+            entriesString.append(item.toString()).append(";");
         }
         // Save the entries string to SharedPreferences
         editor.putString(date, entriesString.toString());

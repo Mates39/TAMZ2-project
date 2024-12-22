@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,9 +28,10 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private ListView todayActivities;
-    private ArrayList<String> activities;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<EntryItem> activities;
+    private DiaryAdapter adapter;
     private String date;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +46,14 @@ public class MainActivity extends AppCompatActivity {
         CalendarView cal = findViewById(R.id.calendarView);
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         date = sdf.format(new Date());
-        todayActivities = findViewById(R.id.TodayActivities);
-        activities = new ArrayList<>();
+        activities = new ArrayList<EntryItem>();
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DiaryAdapter(this, activities, date);
-        todayActivities.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+
+
+
 
         cal.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             String date = String.format("%02d/%02d/%d", month+1, dayOfMonth, year);
@@ -61,10 +68,15 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppData", MODE_PRIVATE);
         String savedEntries = sharedPreferences.getString(date, null);
         activities.clear();
-        if (savedEntries != null) {
+        if (savedEntries != null && savedEntries.length() != 0) {
             // Convert the saved entries back to an ArrayList
             String[] entriesArray = savedEntries.split(";");
-            activities.addAll(Arrays.asList(entriesArray));
+            for(String s : entriesArray)
+            {
+                String[] values = s.split("\\$");
+                Log.d("as", values[0]);
+                activities.add(new EntryItem(values[0], values[1], Integer.parseInt(values[2])));
+            }
         }
         adapter.notifyDataSetChanged();
     }

@@ -21,7 +21,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ArrayList<String> entries = new ArrayList<>();
+        ArrayList<EntryItem> entries = new ArrayList<>();
 
         String date = getIntent().getStringExtra("date");
         int position = getIntent().getIntExtra("position", 1000);
@@ -45,7 +45,12 @@ public class DetailActivity extends AppCompatActivity {
                 if(savedEntries != null)
                 {
                     String[] entriesArray = savedEntries.split(";");
-                    entries.addAll(Arrays.asList(entriesArray));
+                    for(String s : entriesArray)
+                    {
+                        String[] values = s.split("\\$");
+                        Log.d("as", values[0]);
+                        entries.add(new EntryItem(values[0], values[1], Integer.parseInt(values[2])));
+                    }
                     entries.remove(position);
 
                     SharedPreferences.Editor editor = sp.edit();
@@ -53,8 +58,8 @@ public class DetailActivity extends AppCompatActivity {
                     editor.clear();
                     if(!entries.isEmpty())
                     {
-                        for (String entry : entries) {
-                            entriesString.append(entry).append(";");
+                        for (EntryItem item : entries) {
+                            entriesString.append(item.toString()).append(";");
                         }
                         // Save the entries string to SharedPreferences
                         editor.putString(date, entriesString.toString());
