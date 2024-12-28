@@ -1,7 +1,12 @@
 package com.example.project;
 
+import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -12,6 +17,8 @@ import android.widget.TextView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,16 +39,22 @@ public class MainActivity extends AppCompatActivity {
     private DiaryAdapter adapter;
     private String date;
     private RecyclerView recyclerView;
+    private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_POST_NOTIFICATIONS);
+        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        testNotification();
 
         CalendarView cal = findViewById(R.id.calendarView);
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -64,6 +77,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, you can post notifications
+            } else {
+                // Permission denied, handle accordingly
+            }
+        }
+    }
     private void loadEntries(String date) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppData", MODE_PRIVATE);
         String savedEntries = sharedPreferences.getString(date, null);
@@ -79,6 +104,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void testNotification() {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("entry", "This is a test notification.");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent); // Trigger after 5 seconds
     }
 
     @Override

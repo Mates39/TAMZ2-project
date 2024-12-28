@@ -5,17 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="23dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
@@ -27,13 +16,66 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/deleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
-        android:layout_marginEnd="25dp"
-        android:text="delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="83dp"
+        android:text="Delete"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="43dp"
+        android:layout_marginBottom="303dp"
+        android:text="Edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/deleteBtn" />
+
+    <EditText
+        android:id="@+id/detailEntryText"
+        android:layout_width="227dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="101dp"
+        android:layout_marginBottom="104dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/detailEntryType"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button" />
+
+    <EditText
+        android:id="@+id/detailEntryTime"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="154dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="154dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
+        app:layout_constraintEnd_toEndOf="@+id/deleteBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <EditText
+        android:id="@+id/detailEntryType"
+        android:layout_width="41dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="34dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/deleteBtn"
+        app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailEntryTime" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

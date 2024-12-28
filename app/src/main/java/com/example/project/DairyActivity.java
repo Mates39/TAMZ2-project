@@ -1,14 +1,14 @@
 package com.example.project;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 
 public class DairyActivity extends AppCompatActivity {
-    private EditText diaryEntryEditText;
+    private EditText diaryEntryText;
+    private EditText diaryEntryType;
+    private EditText diaryEntryTime;
     private RecyclerView entriesView;
     private ArrayList<EntryItem> entries;
     private DiaryAdapter adapter;
@@ -44,7 +46,9 @@ public class DairyActivity extends AppCompatActivity {
         date = getIntent().getStringExtra("date");
 
 
-        diaryEntryEditText = findViewById(R.id.diaryEntryEditText);
+        diaryEntryText = findViewById(R.id.diaryEntryText);
+        diaryEntryType = findViewById(R.id.diaryEntryType);
+        diaryEntryTime = findViewById(R.id.diaryEntryTime);
         entriesView = findViewById(R.id.entriesView);
         entriesView.setLayoutManager(new LinearLayoutManager(this));
         Button saveButton = findViewById(R.id.saveButton);
@@ -53,22 +57,24 @@ public class DairyActivity extends AppCompatActivity {
         adapter = new DiaryAdapter(this, entries, date);
         entriesView.setAdapter(adapter);
 
-        EditText text = findViewById(R.id.diaryEntryEditText);
-        EditText type = findViewById(R.id.editTextNumber);
-        EditText time = findViewById(R.id.editTextTime2);
 
 
 
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                String entry = diaryEntryEditText.getText().toString().trim();
-                if(!entry.isEmpty()){
-                    //entries.add(new EntryItem(time.toString(), text.toString(),Integer.parseInt(type.toString())));
-                    entries.add(new EntryItem("11:30", "schuzka", 1));
+                String entryText = diaryEntryText.getText().toString().trim();
+                String entryType = diaryEntryType.getText().toString().trim();
+                String entryTime = diaryEntryTime.getText().toString().trim();
+                if(!entryText.isEmpty() && !entryType.isEmpty()){
+                    EntryItem item = new EntryItem(entryTime, entryText, Integer.parseInt(entryType));
+                    entries.add(item);
                     adapter.notifyDataSetChanged();
-                    diaryEntryEditText.setText("");
+                    diaryEntryText.setText("");
+                    diaryEntryType.setText("");
+                    diaryEntryTime.setText("");
                     saveEntries(date);
+                    setNotification(item, entryTime);
                     Toast.makeText(DairyActivity.this, "entry saved", Toast.LENGTH_SHORT).show();
 
                 }
@@ -123,4 +129,31 @@ public class DairyActivity extends AppCompatActivity {
         editor.putString(date, entriesString.toString());
         editor.apply();
     }
+
+    private void setNotification(EntryItem entry, String time){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("entry", "Upcomig event: " + entry.text + " at " + entry.time);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, entry.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.add(Calendar.MINUTE, -30);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    private void deleteNotification(EntryItem entry){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, entry.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
+
 }

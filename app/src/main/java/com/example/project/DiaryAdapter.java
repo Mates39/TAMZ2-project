@@ -2,6 +2,7 @@ package com.example.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,20 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.MyViewHolder
         holder.time.setText(obj.time);
         holder.textView.setText(obj.text);
         holder.type = obj.type;
-
+        switch(holder.type){
+            case 0:
+                holder.itemView.setBackgroundColor(Color.parseColor("#f56056"));
+                break;
+            case 1:
+                holder.itemView.setBackgroundColor(Color.parseColor("#f5e056"));
+                break;
+            case 2:
+                holder.itemView.setBackgroundColor(Color.parseColor("#56a6f5"));
+                break;
+            case 3:
+                holder.itemView.setBackgroundColor(Color.parseColor("#d556f5"));
+                break;
+        }
         holder.detailBtn.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("position", position);

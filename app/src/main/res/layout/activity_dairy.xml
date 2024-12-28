@@ -7,43 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".DairyActivity">
 
-    <EditText
-        android:id="@+id/editTextText2"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginBottom="38dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Text:"
-        app:layout_constraintBottom_toBottomOf="@+id/diaryEntryEditText"
-        app:layout_constraintEnd_toStartOf="@+id/diaryEntryEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar_button" />
-
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="223dp"
         android:paddingBottom="16dp"
         android:text="Work Diary"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/diaryEntryTime"
         app:layout_constraintEnd_toStartOf="@+id/calendar_button"
         app:layout_constraintHorizontal_bias="0.702"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/diaryEntryEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="17dp"
+        android:id="@+id/diaryEntryText"
+        android:layout_width="270dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="16dp"
         android:background="@android:drawable/edit_text"
         android:gravity="top|start"
         android:hint="Write your diary entry here..."
@@ -51,8 +37,8 @@
         android:minHeight="100dp"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextText2"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintStart_toEndOf="@+id/labelEntryText"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/saveButton"
@@ -85,6 +71,74 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/diaryEntryType"
+        android:layout_width="48dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="126dp"
+        android:layout_marginEnd="216dp"
+        android:layout_marginBottom="122dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/labelEntryType"
+        app:layout_constraintTop_toTopOf="@+id/diaryEntryText"
+        app:layout_constraintVertical_bias="0.466" />
+
+    <TextView
+        android:id="@+id/labelEntryText"
+        android:layout_width="69dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="101dp"
+        android:layout_marginEnd="50dp"
+        android:text="Text:"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/diaryEntryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/labelEntryType"
+        android:layout_width="69dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="208dp"
+        android:layout_marginEnd="50dp"
+        android:text="Type:"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/diaryEntryText"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/labelEntryTime"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="296dp"
+        android:layout_marginEnd="63dp"
+        android:text="Time:"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/diaryEntryTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/diaryEntryTime"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="180dp"
+        android:layout_marginBottom="41dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/labelEntryTime" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
@@ -104,65 +158,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="126dp"
-        android:layout_marginEnd="205dp"
-        android:layout_marginBottom="122dp"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextText3"
-        app:layout_constraintTop_toTopOf="@+id/diaryEntryEditText" />
-
-    <EditText
-        android:id="@+id/editTextTime2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="57dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintBottom_toBottomOf="@+id/saveButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextText"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
-
-    <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="41dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginBottom="33dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Time:"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTime2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
-
-    <EditText
-        android:id="@+id/editTextText3"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginBottom="48dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Type:"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTime2"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumber"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
